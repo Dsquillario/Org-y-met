@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Control de Stock - 2 Semanas</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f5f7fa;
+      margin: 0;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+
+    table {
+      width: 90%;
+      margin: 20px auto;
+      border-collapse: collapse;
+      background-color: white;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    th, td {
+      border: 1px solid #ccc;
+      padding: 10px;
+      text-align: center;
+    }
+
+    th {
+      background-color: #0078D7;
+      color: white;
+    }
+
+    tr:nth-child(even) {
+      background-color: #f2f2f2;
+    }
+
+    .final {
+      background-color: #e0f7e9;
+      font-weight: bold;
+    }
+
+    .sin-stock {
+      background-color: #ffcccc;
+      font-weight: bold;
+    }
+
+    .footer {
+      text-align: center;
+      font-weight: bold;
+      margin-top: 20px;
+      font-size: 18px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>📦 Control de Stock (2 Semanas)</h1>
+
+  <table id="tablaStock">
+    <thead>
+      <tr>
+        <th>Semana</th>
+        <th>Día</th>
+        <th>Entradas</th>
+        <th>Salidas</th>
+        <th>Stock Diario</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Las filas se generan automáticamente con JavaScript -->
+    </tbody>
+  </table>
+
+  <div class="footer" id="resultadoFinal"></div>
+
+  <script>
+    // --- Datos del problema ---
+    const stockInicial = 50;
+
+    const entradas = {
+      "Lunes": 70,
+      "Miércoles": 100,
+      "Viernes": 150
+    };
+
+    const salidas = {
+      1: { "Lunes": 36, "Martes": 38, "Miércoles": 75, "Jueves": 22, "Viernes": 49 },
+      2: { "Lunes": 62, "Martes": 126, "Miércoles": 132, "Jueves": 0, "Viernes": 23 }
+    };
+
+    const dias = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes"];
+
+    // --- Cálculo ---
+    let stock = stockInicial;
+    const tabla = document.querySelector("#tablaStock tbody");
+
+    for (let semana = 1; semana <= 2; semana++) {
+      dias.forEach(dia => {
+        const entrada = entradas[dia] || 0;
+        const salida = salidas[semana][dia] || 0;
+        stock = stock + entrada - salida;
+
+        const fila = document.createElement("tr");
+
+        // Si el stock se agota
+        if (stock <= 0) {
+          stock = 0;
+          fila.classList.add("sin-stock");
+        }
+
+        fila.innerHTML = `
+          <td>Semana ${semana}</td>
+          <td>${dia}</td>
+          <td>${entrada}</td>
+          <td>${salida}</td>
+          <td>${stock}</td>
+        `;
+
+        tabla.appendChild(fila);
+      });
+    }
+
+    // --- Mostrar resultado final ---
+    const resultado = document.getElementById("resultadoFinal");
+    resultado.textContent = `✅ Stock inicial: ${stockInicial} unidades | 📦 Stock final: ${stock} unidades`;
+  </script>
+
+</body>
+</html>
